@@ -45,14 +45,15 @@ router.put("/like", requireLogin, (req, res) => {
   }, {
       new: true
   })
-      .then((err, result) => {
-          if (err) {
-              return res.status(422).json({ error: err })
-          } else {
+      .then(( result) => {
+        //   if (err) {
+        //       return res.status(422).json({ error: err })
+        //   } else {
               res.json(result)
-          }
+        //   }
       })
 })
+
 
 router.put("/unlike", requireLogin, (req, res) => {
   POST.findByIdAndUpdate(req.body.postId, {
@@ -60,12 +61,12 @@ router.put("/unlike", requireLogin, (req, res) => {
   }, {
       new: true
   })
-      .then((err, result) => {
-          if (err) {
-              return res.status(422).json({ error: err })
-          } else {
+      .then(( result) => {
+        //   if (err) {
+        //       return res.status(422).json({ error: err })
+        //   } else {
               res.json(result)
-          }
+        //   }
       })
 })
 
@@ -81,12 +82,12 @@ router.put("/comment", requireLogin, (req, res) => {
   })
       // .populate("comments.postedBy", "_id name")
       // .populate("postedBy", "_id name Photo")
-      .then((err, result) => {
-          if (err) {
-              return res.status(422).json({ error: err })
-          } else {
+      .then(( result) => {
+        //   if (err) {
+        //       return res.status(422).json({ error: err })
+        //   } else {
               res.json(result)
-          }
+          
       })
 })
 
