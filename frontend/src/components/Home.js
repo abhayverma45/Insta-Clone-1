@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [comment, setComment] = useState("");
+  const [show, setShow] = useState(false);
+  const [item, setItem] = useState([]);
+  
+  // Toast functions
+  const notifyA = (msg) => toast.error(msg);
+  const notifyB = (msg) => toast.success(msg);
+
+
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -21,6 +30,17 @@ export default function Home() {
       .then((result) => setdata(result))
       .catch((err) => console.log(err));
   }, []);
+
+   // to show and hide comments
+   const toggleComment = (post) => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+      setItem(post);
+      console.log(item)
+    }
+  };
 
   // fetching all likes
 
@@ -89,7 +109,16 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((result) => {
-       
+        const newData = data.map((post) => {
+          if (post._id === result._id) {
+            return result;
+          } else {
+            return post;
+          }
+        });
+        setdata(newData);
+       setComment("");
+       notifyB("comment posted")
         console.log(result);
       });
   };
@@ -140,6 +169,14 @@ export default function Home() {
 
               <p>{post.likes.length} likes</p>
               <p>{post.body}</p>
+              <p
+                style={{ fontWeight: "bold", cursor: "pointer" }}
+                onClick={() => {
+                  toggleComment(post);
+                }}
+              >
+                View all comments
+              </p>
             </div>
             {/* COMMENTS */}
             <div className="add-comment">
@@ -184,7 +221,7 @@ export default function Home() {
                     alt=""
                   />
                 </div>
-                <h5>{item.postedBy.name}</h5>
+                <h5>{item.postedBy.Name}</h5>
               </div>
 
                 {/* commentSection */}
@@ -199,7 +236,7 @@ export default function Home() {
                         className="commenter"
                         style={{ fontWeight: "bolder" }}
                       >
-                        {comment.postedBy.name}{" "}
+                        {comment.postedBy.Name}{" "}
                       </span>
                       <span className="commentText">{comment.comment}</span>
                     </p>
@@ -229,7 +266,7 @@ export default function Home() {
 <button
                   className="comment"
                   onClick={() => {
-                    makeComment(comment, item._id);
+                    makecomment(comment, item._id);
                     toggleComment();
                   }}
                 >

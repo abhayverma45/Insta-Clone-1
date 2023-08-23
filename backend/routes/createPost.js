@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const requireLogin = require("../middlewares/requireLogin");
 const POST = mongoose.model("POST");
 // route
-router.get("/allpost",requireLogin, (req, res) => {
+router.get("/allpost", requireLogin, (req, res) => {
   POST.find()
-  .populate("postedBy","_id Name")
+    .populate("postedBy", "_id Name")
+    .populate("comments.postedBy", "_id Name ")
     .then((posts) => res.json(posts))
     .catch((err) => console.log(err));
 });
@@ -31,64 +32,72 @@ router.post("/createPost", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.get("/mypost",requireLogin,(req,res)=>{
-  POST.find({postedBy:req.user._id})
-  .populate("postedBy","_id Name")
-  .then(mypost=>{
-    res.json(mypost)
-  })
-})
+router.get("/mypost", requireLogin, (req, res) => {
+  POST.find({ postedBy: req.user._id })
+    .populate("postedBy", "_id Name")
+    .then((mypost) => {
+      res.json(mypost);
+    });
+});
 
 router.put("/like", requireLogin, (req, res) => {
-  POST.findByIdAndUpdate(req.body.postId, {
-      $push: { likes: req.user._id }
-  }, {
-      new: true
-  })
-      .then(( result) => {
-        //   if (err) {
-        //       return res.status(422).json({ error: err })
-        //   } else {
-              res.json(result)
-        //   }
-      })
-})
-
+  POST.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { likes: req.user._id },
+    },
+    {
+      new: true,
+    }
+  ).then((result) => {
+    //   if (err) {
+    //       return res.status(422).json({ error: err })
+    //   } else {
+    res.json(result);
+    //   }
+  });
+});
 
 router.put("/unlike", requireLogin, (req, res) => {
-  POST.findByIdAndUpdate(req.body.postId, {
-      $pull: { likes: req.user._id }
-  }, {
-      new: true
-  })
-      .then(( result) => {
-        //   if (err) {
-        //       return res.status(422).json({ error: err })
-        //   } else {
-              res.json(result)
-        //   }
-      })
-})
+  POST.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $pull: { likes: req.user._id },
+    },
+    {
+      new: true,
+    }
+  ).then((result) => {
+    //   if (err) {
+    //       return res.status(422).json({ error: err })
+    //   } else {
+    res.json(result);
+    //   }
+  });
+});
 
 router.put("/comment", requireLogin, (req, res) => {
   const comment = {
-      comment: req.body.text,
-      postedBy: req.user._id
-  }
-  POST.findByIdAndUpdate(req.body.postId, {
-      $push: { comments: comment }
-  }, {
-      new: true
-  })
-      .populate("comments.postedBy", "_id name")
-      // .populate("postedBy", "_id name Photo")
-      .then(( result) => {
-        //   if (err) {
-        //       return res.status(422).json({ error: err })
-        //   } else {
-              res.json(result)
-          
-      })
-})
+    comment: req.body.text,
+    postedBy: req.user._id,
+  };
+  POST.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { comments: comment },
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("comments.postedBy", "_id name")
+    .populate("postedBy", "_id name photo")
+    .then((result) => {
+      //   if (err) {
+      //       return res.status(422).json({ error: err })
+      //   } else {
+      res.json(result);
+    });
+});
 
 module.exports = router;
