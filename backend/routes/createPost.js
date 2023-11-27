@@ -35,69 +35,82 @@ router.post("/createPost", requireLogin, (req, res) => {
 router.get("/mypost", requireLogin, (req, res) => {
   POST.find({ postedBy: req.user._id })
     .populate("postedBy", "_id Name")
+    .populate("comments.postedBy", "_id Name ")
     .then((mypost) => {
       res.json(mypost);
     });
 });
 
 router.put("/like", requireLogin, (req, res) => {
-  POST.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $push: { likes: req.user._id },
-    },
-    {
-      new: true,
-    }
-  ).then((result) => {
-    //   if (err) {
-    //       return res.status(422).json({ error: err })
-    //   } else {
-    res.json(result);
-    //   }
-  });
-});
+  POST.findByIdAndUpdate(req.body.postId, {
+      $push: { likes: req.user._id }
+  }, {
+      new: true
+  }).populate("postedBy", "_id name Photo")
+      .exec((err, result) => {
+          if (err) {
+              return res.status(422).json({ error: err })
+          } else {
+              res.json(result)
+          }
+      })
+})
 
 router.put("/unlike", requireLogin, (req, res) => {
-  POST.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $pull: { likes: req.user._id },
-    },
-    {
-      new: true,
-    }
-  ).then((result) => {
-    //   if (err) {
-    //       return res.status(422).json({ error: err })
-    //   } else {
-    res.json(result);
-    //   }
-  });
-});
+  POST.findByIdAndUpdate(req.body.postId, {
+      $pull: { likes: req.user._id }
+  }, {
+      new: true
+  }).populate("postedBy", "_id name Photo")
+      .exec((err, result) => {
+          if (err) {
+              return res.status(422).json({ error: err })
+          } else {
+              res.json(result)
+          }
+      })
+})
 
 router.put("/comment", requireLogin, (req, res) => {
   const comment = {
-    comment: req.body.text,
-    postedBy: req.user._id,
-  };
-  POST.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $push: { comments: comment },
-    },
-    {
-      new: true,
-    }
-  )
-    .populate("comments.postedBy", "_id name")
-    .populate("postedBy", "_id name photo")
-    .then((result) => {
-      //   if (err) {
-      //       return res.status(422).json({ error: err })
-      //   } else {
-      res.json(result);
-    });
-});
+      comment: req.body.text,
+      postedBy: req.user._id
+  }
+  POST.findByIdAndUpdate(req.body.postId, {
+      $push: { comments: comments }
+  }, {
+      new: true
+  })
+      .populate("comments.postedBy", "_id Name")
+      .populate("postedBy", "_id name Photo")
+      .exec((err, result) => {
+          if (err) {
+              return res.status(422).json({ error: err })
+          } else {
+              res.json(result)
+          }
+      })
+})
+
+// Api to delete post
+router.delete("/deletePost/:postId", requireLogin, (req, res) => {
+    POST.findOne({ _id: req.params.postId })
+        .populate("postedBy", "_id")
+        .exec((err, post) => {
+            if (err || !post) {
+                return res.status(422).json({ error: err })
+            }
+
+            if (post.postedBy._id.toString() == req.user._id.toString()) {
+
+                post.remove()
+                    .then(result => {
+                        return res.json({ message: "Successfully deleted" })
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+            }
+        })
+})
 
 module.exports = router;

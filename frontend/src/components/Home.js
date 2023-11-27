@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -9,11 +10,10 @@ export default function Home() {
   const [comment, setComment] = useState("");
   const [show, setShow] = useState(false);
   const [item, setItem] = useState([]);
-  
-  // Toast functions
-  const notifyA = (msg) => toast.error(msg);
-  const notifyB = (msg) => toast.success(msg);
 
+  // Toast functions
+  // const notifyA = (msg) => toast.error(msg);
+  const notifyB = (msg) => toast.success(msg);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -27,18 +27,19 @@ export default function Home() {
       },
     })
       .then((res) => res.json())
-      .then((result) => setdata(result))
+      .then((result) => {
+        console.log(result)
+        setdata(result)})
       .catch((err) => console.log(err));
   }, []);
 
-   // to show and hide comments
-   const toggleComment = (post) => {
+  // to show and hide comments
+  const toggleComment = (post) => {
     if (show) {
       setShow(false);
     } else {
       setShow(true);
       setItem(post);
-      console.log(item)
     }
   };
 
@@ -110,15 +111,15 @@ export default function Home() {
       .then((res) => res.json())
       .then((result) => {
         const newData = data.map((post) => {
-          if (post._id === result._id) {
+          if (post._id == result._id) {
             return result;
           } else {
             return post;
           }
         });
         setdata(newData);
-       setComment("");
-       notifyB("comment posted")
+        setComment("");
+        notifyB("comment  posted");
         console.log(result);
       });
   };
@@ -192,7 +193,7 @@ export default function Home() {
               <button
                 className="comment"
                 onClick={() => {
-                  makecomment(comment,post._id);
+                  makecomment(comment, post._id);
                 }}
               >
                 Post
@@ -221,11 +222,16 @@ export default function Home() {
                     alt=""
                   />
                 </div>
-                <h5>{item.postedBy.Name}</h5>
+
+                <h5>
+                  <Link to={`/profile/${item.postedBy._Id}`}>
+                    {item.postedBy.Name}
+                  </Link>
+                </h5>
               </div>
 
-                {/* commentSection */}
-                <div
+              {/* commentSection */}
+              <div
                 className="comment-section"
                 style={{ borderBottom: "1px solid #00000029" }}
               >
@@ -236,7 +242,7 @@ export default function Home() {
                         className="commenter"
                         style={{ fontWeight: "bolder" }}
                       >
-                        {comment.postedBy.Name}{" "}
+                        {comment.postedBy.Name}
                       </span>
                       <span className="commentText">{comment.comment}</span>
                     </p>
@@ -244,9 +250,8 @@ export default function Home() {
                 })}
               </div>
 
-             
-               {/* card content */}
-               <div className="card-content">
+              {/* card content */}
+              <div className="card-content">
                 <p>{item.likes.length} Likes</p>
                 <p>{item.body}</p>
               </div>
@@ -262,8 +267,7 @@ export default function Home() {
                     setComment(e.target.value);
                   }}
                 />
-
-<button
+                <button
                   className="comment"
                   onClick={() => {
                     makecomment(comment, item._id);
@@ -287,7 +291,6 @@ export default function Home() {
           </div>
         </div>
       )}
-      
     </div>
   );
 }

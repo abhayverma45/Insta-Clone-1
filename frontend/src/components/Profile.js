@@ -2,18 +2,33 @@ import React from "react";
 import "./Profile.css";
 import { useEffect } from "react";
 import { useState } from "react";
+import PostDetail from "./postdetail";
 
 export default function Profile() {
-  const [pic, setpic] = useState([])
+  const [pic, setpic] = useState([]);
+  const [show, setShow] = useState(false);
+  const [posts, setPosts] = useState([]);
+
+  const toggleDetails = (posts) => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+      setPosts(posts);
+    }
+  };
+
   useEffect(() => {
     fetch("http://localhost:8000/mypost", {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-      }
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
     })
       .then((res) => res.json())
-      .then((result)=>{setpic(result)})
-      console.log(pic)
+      .then((result) => {
+        setpic(result);
+      });
+    console.log(pic);
   }, []);
 
   return (
@@ -31,7 +46,7 @@ export default function Profile() {
         <div className="profile-data">
           <h1>{JSON.parse(localStorage.getItem("user")).Name}</h1>
           <div className="profile-info" style={{ display: "flex" }}>
-            <p>40 post</p>
+            <p>{posts.length} posts</p>
             <p>40 follower</p>
             <p>40 following</p>
           </div>
@@ -47,10 +62,18 @@ export default function Profile() {
       ></hr>
       {/* profile gallary */}
       <div className="profile-gallary">
-        {pic.map((pics)=>{
-return <img key={pics._id} src={pics.photo} className="item"></img>
+        {pic.map((pics) => {
+          return (
+            <img
+              key={pics._id}
+              src={pics.photo}
+              onClick={() => toggleDetails(pics)}
+              className="item"
+            ></img>
+          );
         })}
       </div>
+      {show && <PostDetail item={posts} toggleDetails={toggleDetails} />}
     </div>
   );
 }

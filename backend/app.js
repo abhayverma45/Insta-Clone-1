@@ -10,6 +10,7 @@ require("./models/model");
 require("./models/post")
 app.use(require("./routes/auth"))
 app.use(require("./routes/createPost"))
+app.use(require("./routes/user"))
 
 
 mongoose.connect(mongo_url);
