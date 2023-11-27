@@ -24,61 +24,61 @@ router.get("/user/:id", (req, res) => {
 })
 
 // to follow user
-router.put("/follow", requireLogin, (req, res) => {
-    USER.findByIdAndUpdate(req.body.followId, {
-        $push: { followers: req.user._id }
-    }, {
-        new: true
-    }, (err, result) => {
-        if (err) {
-            return res.status(422).json({ error: err })
-        }
-        USER.findByIdAndUpdate(req.user._id, {
-            $push: { following: req.body.followId }
-        }, {
-            new: true
-        }).then(result => {
-            res.json(result)
+// router.put("/follow", requireLogin, (req, res) => {
+//     USER.findByIdAndUpdate(req.body.followId, {
+//         $push: { followers: req.user._id }
+//     }, {
+//         new: true
+//     }, (err, result) => {
+//         if (err) {
+//             return res.status(422).json({ error: err })
+//         }
+//         USER.findByIdAndUpdate(req.user._id, {
+//             $push: { following: req.body.followId }
+//         }, {
+//             new: true
+//         }).then(result => {
+//             res.json(result)
 
-        })
-            .catch(err => { return res.status(422).json({ error: err }) })
-    }
-    )
-})
+//         })
+//             .catch(err => { return res.status(422).json({ error: err }) })
+//     }
+//     )
+// })
 
 // to unfollow user
-router.put("/unfollow", requireLogin, (req, res) => {
-    USER.findByIdAndUpdate(req.body.followId, {
-        $pull: { followers: req.user._id }
-    }, {
-        new: true
-    }, (err, result) => {
-        if (err) {
-            return res.status(422).json({ error: err })
-        }
-        USER.findByIdAndUpdate(req.user._id, {
-            $pull: { following: req.body.followId }
-        }, {
-            new: true
-        }).then(result => res.json(result))
-            .catch(err => { return res.status(422).json({ error: err }) })
-    }
-    )
-})
+// router.put("/unfollow", requireLogin, (req, res) => {
+//     USER.findByIdAndUpdate(req.body.followId, {
+//         $pull: { followers: req.user._id }
+//     }, {
+//         new: true
+//     }, (err, result) => {
+//         if (err) {
+//             return res.status(422).json({ error: err })
+//         }
+//         USER.findByIdAndUpdate(req.user._id, {
+//             $pull: { following: req.body.followId }
+//         }, {
+//             new: true
+//         }).then(result => res.json(result))
+//             .catch(err => { return res.status(422).json({ error: err }) })
+//     }
+//     )
+// })
 
 // to upload profile pic
-router.put("/uploadProfilePic", requireLogin, (req, res) => {
-    USER.findByIdAndUpdate(req.user._id, {
-        $set: { Photo: req.body.pic }
-    }, {
-        new: true
-    }).exec((err, result) => {
-        if (err) {
-            return res.status(422).json({ error: er })
-        } else {
-            res.json(result)
-        }
-    })
-})
+// router.put("/uploadProfilePic", requireLogin, (req, res) => {
+//     USER.findByIdAndUpdate(req.user._id, {
+//         $set: { Photo: req.body.pic }
+//     }, {
+//         new: true
+//     }).exec((err, result) => {
+//         if (err) {
+//             return res.status(422).json({ error: er })
+//         } else {
+//             res.json(result)
+//         }
+//     })
+// })
 
 module.exports = router;

@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CreatePost from "./components/CreatePost";
 import { LoginContext } from "./context/logincontext";
 import Modal from "./components/modal";
-import Userprofile from "./components/userprofile"
+import UserProfile from "./components/userprofile"
 
 function App() {
   const [userLogin, setuserLogin] = useState(false);
@@ -28,7 +28,7 @@ function App() {
             <Route path="/signin" element={<SignIn />}></Route>
             <Route exact path="/profile" element={<Profile />}></Route>
             <Route path="/createpost" element={<CreatePost />}></Route>
-            <Route path="/profile/:userid" element={<Userprofile />}></Route>
+            <Route path="/profile/:userid" element={<UserProfile />}></Route>
           </Routes>
           <ToastContainer theme="dark" />
           {modalOpen && <Modal setmodalOpen={setmodalOpen} />}
