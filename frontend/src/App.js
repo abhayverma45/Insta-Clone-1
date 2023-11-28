@@ -29,6 +29,7 @@ function App() {
             <Route exact path="/profile" element={<Profile />}></Route>
             <Route path="/createpost" element={<CreatePost />}></Route>
             <Route path="/profile/:userid" element={<UserProfile />}></Route>
+            {/* <Route path="/followingpost" element={<MyFolliwngPost />}></Route> */}
           </Routes>
           <ToastContainer theme="dark" />
           {modalOpen && <Modal setmodalOpen={setmodalOpen} />}
