@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+
 import React, { createContext, useState } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -13,6 +13,7 @@ import CreatePost from "./components/CreatePost";
 import { LoginContext } from "./context/logincontext";
 import Modal from "./components/modal";
 import UserProfile from "./components/userprofile"
+
 
 function App() {
   const [userLogin, setuserLogin] = useState(false);

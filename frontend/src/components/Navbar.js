@@ -3,8 +3,9 @@ import "./Navbar.css";
 import logo from "../img/logo.png";
 import { Link } from "react-router-dom";
 import { LoginContext } from "../context/logincontext";
-
+import { useNavigate } from "react-router-dom";
 export default function Navbar({ login }) {
+  let navigate = useNavigate();
   const{setmodalOpen} =useContext(LoginContext)
   const loginStatus = () => {
     const token = localStorage.getItem("jwt");
@@ -36,7 +37,8 @@ export default function Navbar({ login }) {
 
   return (
     <div className="navbar">
-      <img src={logo} alt=" "></img>
+      <img src={logo} alt=" " style={{cursor:"pointer"}} onClick={()=>navigate('/')}>
+      </img>
       <ul className="nav-menu">{loginStatus()}</ul>
     </div>
   );

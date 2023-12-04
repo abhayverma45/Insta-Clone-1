@@ -68,7 +68,7 @@ export default function PostDetail({ item, toggleDetails }) {
                   <span className="commenter" style={{ fontWeight: "bolder" }}>
                     {comment.postedBy.Name}{" "}
                   </span>
-                  <span className="commentText">{comment.comment}</span>
+                  <span className="commentText">{comment.Comment}</span>
                 </p>
               );
             })}
@@ -82,16 +82,16 @@ export default function PostDetail({ item, toggleDetails }) {
 
           {/* add Comment */}
           <div className="add-comment">
-            <span className="material-symbols-outlined">mood</span>
-            <input
+            {/* <span className="material-symbols-outlined">mood</span> */}
+            {/* <input
               type="text"
               placeholder="Add a comment"
               //   value={comment}
               //   onChange={(e) => {
               //     setComment(e.target.value);
               //   }}
-            />
-            <button
+            /> */}
+            {/* <button
               className="comment"
               //   onClick={() => {
               //     makeComment(comment, item._id);
@@ -99,7 +99,7 @@ export default function PostDetail({ item, toggleDetails }) {
               //   }}
             >
               Post
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

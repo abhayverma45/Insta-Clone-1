@@ -8,7 +8,8 @@ router.get("/allpost", requireLogin, (req, res) => {
   POST.find()
     .populate("postedBy", "_id Name")
     .populate("comments.postedBy", "_id Name ")
-    .then((posts) => res.json(posts))
+    .then((posts) => {
+        res.json(posts)})
     .catch((err) => console.log(err));
 });
 router.post("/createPost", requireLogin, (req, res) => {
@@ -73,11 +74,11 @@ router.put("/unlike", requireLogin, (req, res) => {
 
 router.put("/comment", requireLogin, (req, res) => {
   const comment = {
-      comment: req.body.text,
+      Comment: req.body.text,
       postedBy: req.user._id
   }
   POST.findByIdAndUpdate(req.body.postId, {
-      $push: { comments: comments }
+      $push: { comments: comment }
   }, {
       new: true
   })
@@ -87,6 +88,7 @@ router.put("/comment", requireLogin, (req, res) => {
           if (err) {
               return res.status(422).json({ error: err })
           } else {
+              
               res.json(result)
           }
       })

@@ -35,6 +35,8 @@ export default function Home() {
 
   // to show and hide comments
   const toggleComment = (post) => {
+    console.log("post in toggle comment ", post);
+    console.log("show is ", show);
     if (show) {
       setShow(false);
     } else {
@@ -173,6 +175,7 @@ export default function Home() {
               <p
                 style={{ fontWeight: "bold", cursor: "pointer" }}
                 onClick={() => {
+                  console.log("clicked on toggle comment")
                   toggleComment(post);
                 }}
               >
@@ -236,15 +239,16 @@ export default function Home() {
                 style={{ borderBottom: "1px solid #00000029" }}
               >
                 {item.comments.map((comment) => {
+                  console.log("comment are", comment)
                   return (
                     <p className="comm">
                       <span
                         className="commenter"
                         style={{ fontWeight: "bolder" }}
                       >
-                        {comment.postedBy.Name}
+                        {comment.postedBy.Name} <br></br>
                       </span>
-                      <span className="commentText">{comment.comment}</span>
+                      <span className="commentText">{comment.Comment}</span>
                     </p>
                   );
                 })}
